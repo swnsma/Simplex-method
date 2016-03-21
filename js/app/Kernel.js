@@ -4,7 +4,7 @@ function Kernel() {
 
         var inp = new Inputer();
         inp.generateMetaDataInput($('#container'), function(variables, limits){
-            inp.generateInputTable($('#container'), variables, limits, function(lim, fun, sign) {
+            inp.generateInputTable($('#container'), variables, limits, function(lim, fun, signs, direction) {
                 //TODO: Transformation
                 var Simplex = new SimplexMethod(lim, fun);
                 var extractedData = Simplex.run();

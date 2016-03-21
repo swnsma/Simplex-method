@@ -13,6 +13,13 @@ function Inputer() {
         {val: 10, text: 10}
     ];
 
+    var signs = [
+        {val: 0, text: '='},
+        {val: -1, text: '=<'},
+        {val: 1, text: '=>'}
+    ];
+
+
     var self = this;
     this.metaData = null;
     this.generateMetaDataInput = function($node, callback) {
@@ -78,6 +85,7 @@ function Inputer() {
         container.html('Система лінійних обмежень:<br/>');
         container.appendTo($node);
         var limitInputs = [];
+        var signInputs = [];
         var row, cell;
         for(i = 0; i < limits; i++) {
             limitInputs[i] = [];
@@ -93,10 +101,16 @@ function Inputer() {
             }
             cell = $('<input>').val(0);
             label = $('<span>');
-            label.html('X<sub>' +(j+1) + '</sub> =');
+            label.html('X<sub>' +(j+1) + '</sub>');
             limitInputs[i].push(cell);
             cell.appendTo(row);
             label.appendTo(row);
+            cell = $('<select>');
+            $(signs).each(function(){
+                cell.append($('<option>').attr('value', this.val).text(this.text));
+            });
+            signInputs.push(cell);
+            cell.appendTo(row);
             cell = $('<input>').val(0);
             limitInputs[i].push(cell);
             cell.appendTo(row);
@@ -111,11 +125,16 @@ function Inputer() {
                     extractedTable[i][j] = new Fraction(limitInputs[i][j].val(), 1);
                 }
             }
+            var extractedS = [];
+            for(i = 0; i < signInputs.length; i++) {
+                extractedS.push(signInputs[i].val());
+            }
+
             var extractedF = [];
-            for(i =0; i< variables; i++) {
+            for(i = 0; i < variables; i++) {
                 extractedF.push(new Fraction(inputs[i].val(), 1));
             }
-            callback(extractedTable, extractedF, select.val());
+            callback(extractedTable, extractedF, extractedS, select.val());
 
         });
         button.appendTo($node);
