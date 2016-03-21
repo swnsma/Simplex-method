@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+
+<div id="container">
+
+</div>
+<style scoped>
+    .target {
+        background-color: red;
+    }
+
+    .matched {
+        background-color: brown;
+    }
+</style>
+</body>
+<script src="js/vendor/jquery-2.2.2.min.js"></script>
+<script src="js/app/Optimizer.js"></script>
+<script src="js/app/Fraction.js"></script>
+<script src="js/app/TableProcessor.js"></script>
+<script src="js/app/Visualisator.js"></script>
+<script src="js/app/SimplexMethod.js"></script>
+<script src="js/app/Inputer.js"></script>
+<script src="js/app/Kernel.js"></script>
+
+<script>
+    var kernel = new Kernel();
+    kernel.runApplication();
+</script>
+</html>
