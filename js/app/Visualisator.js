@@ -1,4 +1,4 @@
-Visualizator = (function($) {
+Visualizator = (function ($) {
     var instance;
 
     function Visualizator() {
@@ -9,12 +9,21 @@ Visualizator = (function($) {
         }
     }
 
-    Visualizator.prototype.prepareFraction = function($fraction) {
+    Visualizator.prototype.prepareFraction = function ($fraction) {
         var table = $('<table>');
         var tr = $('<tr>');
         tr.appendTo(table);
         var td = $('<td>');
-        td.text($fraction.getDividend());
+        var str = '';
+        if(Math.abs(Math.round($fraction.getDividend() / M)) >= 1) {
+            var m = Math.round($fraction.getDividend() / M);
+            var free = $fraction.getDividend() - (m * M);
+            str += m+'M'+ (free > 0? '+'+free: free==0?'':free);
+        } else {
+            str += $fraction.getDividend();
+        }
+
+        td.text(str);
         td.appendTo(tr);
 
         if ($fraction.getDivisor() != 1) {
@@ -29,6 +38,7 @@ Visualizator = (function($) {
     };
 
     function prepareTableHeader(count) {
+        var th = $('<thead>');
         var tr = $('<tr>');
         var td = $('<td>');
         td.text('Змінні');
@@ -41,24 +51,36 @@ Visualizator = (function($) {
         td = $('<td>');
         td.text('В.Ч.');
         td.appendTo(tr);
-
-        return tr;
+        tr.appendTo(th);
+        return th;
     }
 
-    Visualizator.prototype.fractionToString = function($fraction) {
-        var str ='';
+    Visualizator.prototype.fractionToString = function ($fraction) {
+        var str = '';
         if ($fraction.getDivisor() != 1) {
-            str += '<sup>' + $fraction.getDividend() + '</sub>/' + '<sub>' + $fraction.getDivisor() + '</sub>';
+            str += '<sup>';
+
+            if(Math.round($fraction.getDividend() / M) >= 1) {
+                var m = Math.round($fraction.getDividend() / M);
+                var free = $fraction.getDividend() / M - m * M;
+                str += m+'M'+ free;
+            } else {
+                str += $fraction.getDividend();
+            }
+
+            str += '</sup>/' + '<sub>' + $fraction.getDivisor() + '</sub>';
         } else {
-           str += $fraction.getDividend();
+            str += $fraction.getDividend();
         }
 
         return str;
 
     };
 
-    Visualizator.prototype.prepareTable = function($table , basis, minMax) {
+    Visualizator.prototype.prepareTable = function ($table, basis, minMax) {
         var table = $('<table>');
+        table.attr('cellspacing', '0');
+        table.attr('border', '2');
         var tr = prepareTableHeader($table[0].length);
         tr.appendTo(table);
         var td;
@@ -66,18 +88,19 @@ Visualizator = (function($) {
         for (var i = 0; i < $table.length; i++) {
             tr = $('<tr>');
             td = $('<td>');
-            if (i != $table.length - 1  ) {
+            if (i != $table.length - 1) {
                 td.html('X<sub>' + (basis[i] + 1) + '</sub>');
             } else {
                 td.html('F');
             }
+            td.addClass('labels');
             td.appendTo(tr);
 
             for (var j = 0; j < $table[i].length; j++) {
                 td = $('<td>');
                 if (i == minMax.min && j == minMax.max) {
-                   td.addClass('target');
-                } else{
+                    td.addClass('target');
+                } else {
                     if (i == minMax.min || j == minMax.max) {
                         td.addClass('matched');
                     }

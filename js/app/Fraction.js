@@ -1,7 +1,7 @@
 function Fraction(dividend, divisor)
 {
     this._dividend = dividend;
-    this._divisor = divisor;
+    this._divisor = typeof divisor !== 'undefined' ? divisor : 1;
     this._optimizer = new Optimizer();
 }
 

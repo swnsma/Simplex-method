@@ -13,8 +13,8 @@ function SimplexMethod($limitMatrix, $function) {
         {
             case 0:
                 str = 'Серед оцінок є додатні. Над усіма додатніми оцінками є додатні елементи. <br/>';
-                str += 'min = X<sub>' + minMax.min + '</sub> - Вводмо в базис.<br/>';
-                str += 'max = X<sub>' + minMax.max + '</sub> - Виводимо з базису.';
+                str += 'min = X<sub>' + (minMax.max + 1) + '</sub> - Вводмо в базис.<br/>';
+                str += 'max = X<sub>' + (minMax.lostBasis + 1) + '</sub> - Виводимо з базису.';
                 return str;
             case 1:
                 return "Над однією з додатніх оцінок відсутні додатні елементи. Функція цілі необмежена на МПР.";
@@ -26,6 +26,12 @@ function SimplexMethod($limitMatrix, $function) {
                 }
                 str+= ') F(X) = ' + visualizator.fractionToString(point.pop());
                 return str;
+            case 3:
+                str =  "Розв\'язок знайдено. Не всі штучні змінні дорівнюють нулю. МПР порожня. (";
+                for (var j = 0; j< minMax.ahtung.length; j++){
+                    str+= "X<sub>" + (minMax.ahtung[j].x+1) + "</sub> = " + visualizator.fractionToString(minMax.ahtung[j].val) + "; ";
+                }
+                return str + ")";
         }
     };
 
@@ -46,12 +52,13 @@ function SimplexMethod($limitMatrix, $function) {
                 }
             }
         }
+        return basis;
     };
     this.run = function() {
         this.findBasis();
         var iteration = 0;
         var table = processor.buildFirstTable(limits, func, basis);
-        var minMax = processor.findMinMax(table);
+        var minMax = processor.findMinMax(table, basis);
 
         var obj = {
             table: visualizator.prepareTable(table, basis, minMax),
@@ -61,11 +68,12 @@ function SimplexMethod($limitMatrix, $function) {
 
         tables.push(obj);
         while(minMax.errCode == 0) {
+            minMax.lostBasis = basis[minMax.min];
             basis[minMax.min] = minMax.max;
 
             table = processor.processNext(table, minMax.max, minMax.min);
             iteration++;
-            minMax = processor.findMinMax(table);
+            minMax = processor.findMinMax(table, basis);
 
             obj = {
                 table: visualizator.prepareTable(table, basis, minMax),

@@ -28,7 +28,7 @@ function Inputer() {
         var container = $('<div>');
         container.appendTo(self.metaData);
         var label = $('<span>');
-        var variables  = $('<select>');
+        var variables  = $('<select>').addClass('btn-warning');
         $(arr).each(function(){
             if (this.val>=3)
             variables.append($('<option>').attr('value', this.val).text(this.text));
@@ -40,7 +40,7 @@ function Inputer() {
         container = $('<div>');
         container.appendTo(self.metaData);
         label = $('<span>');
-        var limits  = $('<select>');
+        var limits  = $('<select>').addClass('btn-warning');
         $(arr).each(function(){
             limits.append($('<option>').attr('value', this.val).text(this.text));
         });
@@ -48,7 +48,7 @@ function Inputer() {
         label.appendTo(container);
         limits.appendTo(container);
         var submit = $('<button>');
-        submit.text('Далі');
+        submit.text('Далі').addClass('btn').addClass('btn-info');
         submit.appendTo(self.metaData);
         submit.on('click', function() {
             self.metaData.hide();
@@ -65,18 +65,25 @@ function Inputer() {
         var inputs = [];
         var input;
         var label;
-        for (var i=0; i < variables; i++) {
-            input = $('<input>').val(0);
+        for (var i=0; i < variables-1; i++) {
+            input = $('<input>').val(0).addClass('form-control');
             inputs.push(input);
             label = $('<span>');
-            label.html('X<sub>' + (i+1) + '</sub>');
+            label.html('X<sub>' + (i+1) + '</sub> + ');
             input.appendTo(container);
             label.appendTo(container);
         }
+        input = $('<input>').val(0).addClass('form-control');
+        inputs.push(input);
+        label = $('<span>');
+        label.html('X<sub>' + (i+1) + '</sub>');
+        input.appendTo(container);
+        label.appendTo(container);
         label = $('<span>');
         label.html('&rarr;');
         label.appendTo(container);
-        var select = $('<select>');
+        container.addClass('form-group');
+        var select = $('<select>').addClass('btn-info');
         $('<option>').attr('value', '1').text('min').appendTo(select);
         $('<option>').attr('value', '-1').text('max').appendTo(select);
         select.appendTo(container);
@@ -92,31 +99,31 @@ function Inputer() {
             row = $('<div>');
             row.appendTo(container);
             for(var j=0; j < variables-1; j++) {
-                cell = $('<input>').val(0);
+                cell = $('<input>').val(0).addClass('form-control');
                 label = $('<span>');
-                label.html('X<sub>' +(j+1) + '</sub> +');
+                label.html('X<sub>' +(j+1) + '</sub> + ');
                 cell.appendTo(row);
                 label.appendTo(row);
                 limitInputs[i].push(cell);
             }
-            cell = $('<input>').val(0);
+            cell = $('<input>').val(0).addClass('form-control');
             label = $('<span>');
             label.html('X<sub>' +(j+1) + '</sub>');
             limitInputs[i].push(cell);
             cell.appendTo(row);
             label.appendTo(row);
-            cell = $('<select>');
+            cell = $('<select>').addClass('btn-info').addClass('sign-option');
             $(signs).each(function(){
                 cell.append($('<option>').attr('value', this.val).text(this.text));
             });
             signInputs.push(cell);
             cell.appendTo(row);
-            cell = $('<input>').val(0);
+            cell = $('<input>').val(0).addClass('form-control');
             limitInputs[i].push(cell);
             cell.appendTo(row);
         }
         var button = $('<button>');
-        button.text('PROCESS');
+        button.text('PROCESS').addClass('btn').addClass('btn-info');
         button.on('click', function() {
             var extractedTable = [];
             for(var i=0; i<limitInputs.length; i++) {

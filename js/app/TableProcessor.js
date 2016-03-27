@@ -30,7 +30,7 @@ TableProcessor = (function()
         return table;
     };
 
-    TableProcessor.prototype.findMinMax = function(table) {
+    TableProcessor.prototype.findMinMax = function(table, basis) {
         var result = {min:-1, max:-1, errCode: 0}, max = -1, j = table.length - 1;
         for (var i = 0; i < table[j].length - 1; i++) {
             if (table[j][i].gt(0)) {
@@ -54,16 +54,22 @@ TableProcessor = (function()
         if (result.max < 0) {
             result.errCode = 2;
             result.point = [];
-            for (i = 0; i< table.length; i++ ) {
-                result.point.push(table[i][table[i].length-1]);
+            for (i = 0; i< table[0].length-1; i++ ) {
+                var index = basis.indexOf(i);
+                if (index != -1 ){
+                    result.point.push(table[index][table[index].length-1]);
+                } else {
+                   result.point.push(new Fraction(0));
+                }
             }
+            result.point.push(table[table.length-1][table[0].length-1]);
             return result;
         }
 
         var min;
         for (j = 0, i = result.max; j < table.length-1; j++) {
             if (table[j][i].gt(0)) {
-                var el = Fraction.calculate(table[j][table[0].length - 1], table[j][i]);
+                var el = Fraction.calculate(table[j][table[0].length - 1], table[j][i], '/');
 
                 if((min && el.lt(min)) || (!min && el.gt(0))) {
                     result.min = j;
