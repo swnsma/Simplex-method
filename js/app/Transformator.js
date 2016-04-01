@@ -74,23 +74,31 @@ function Transformator($table, $function, $conditions, $direction) {
         }
 
         var marked = -1, max = new Fraction(-1);
-        for (i = 0, k = this._table[i].length - 1; i < this._table.length; i++) {
-            if (this._table[i][k].gt(max) && this._processedRows.indexOf(i) == -1) {
-                max = this._table[i][k];
-                marked = i;
+        if (minus.length){
+            for (i = 0, k = this._table[i].length - 1; i < this._table.length; i++) {
+                if (this._table[i][k].gt(max) && this._processedRows.indexOf(i) == -1) {
+                    max = this._table[i][k];
+                    marked = i;
+                }
             }
-        }
 
-        for (i = 0; i < this._table.length; i++) {
-            if (i != marked && minus.indexOf(i) != -1) {
-                for (j = 0; j < this._table[i].length; j++) {
-                    this._table[i][j] = Fraction.calculate(this._table[marked][j], this._table[i][j], '-');
+            for (i = 0; i < this._table.length; i++) {
+                if (i != marked && minus.indexOf(i) != -1) {
+                    for (j = 0; j < this._table[i].length; j++) {
+                        this._table[i][j] = Fraction.calculate(this._table[marked][j], this._table[i][j], '-');
+                    }
                 }
             }
         }
-
         for (i = 0; i < this._table.length; i++) {
-            if (this._processedRows.indexOf(i) == -1 && (minus.indexOf(i) == -1 || i == marked)) {
+            var flag = true;
+            for (var x =0; x< basis.length; x++) {
+                if (this._table[i][basis[x]].eq(1)) {
+                   flag = false;
+                    break;
+                }
+            }
+            if (flag && this._processedRows.indexOf(i) == -1 && (minus.indexOf(i) == -1 || i == marked)) {
                 this._function.push(new Fraction(M));
                 for (j = 0, k = this._table[i].length - 1; j < this._table.length; j++) {
                     z = this._table[j][k];

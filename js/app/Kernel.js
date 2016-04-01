@@ -49,7 +49,7 @@ function Kernel() {
         var extractedData = Simplex.run();
         var $cont = $('#container');
         var inf;
-        for (var i = 0; i < extractedData.length - 1 ; i++) {
+        for (var i = 0; i < extractedData.length - 1; i++) {
             extractedData[i].table.appendTo($cont);
             inf = $('<div>');
             var str = 'Ітерація: ' + extractedData[i].i + '<br/>';
@@ -58,25 +58,27 @@ function Kernel() {
             inf.appendTo($cont);
         }
         var minMax = extractedData[i].minMax;
-        var value = minMax.point[minMax.point.length-1];
-        if (result.direction) {
-           value.mult(-1);
-        }
-        if (result.artificialVars) {
-            minMax.ahtung = [];
-            for(var j = 0; j< transform._artificial.length; j++) {
-                if (!minMax.point[transform._artificial[j]].eq(0)) {
-                    minMax.errCode = 3;
-                    var obj = {};
-                    obj.x = transform._artificial[j];
-                    obj.val = minMax.point[transform._artificial[j]];
-                    minMax.ahtung.push(obj);
+        if (minMax.errCode != 1) {
+            var value = minMax.point[minMax.point.length - 1];
+            if (result.direction) {
+                value.mult(-1);
+            }
+
+            if (result.artificialVars) {
+                minMax.ahtung = [];
+                for (var j = 0; j < transform._artificial.length; j++) {
+                    if (!minMax.point[transform._artificial[j]].eq(0)) {
+                        minMax.errCode = 3;
+                        var obj = {};
+                        obj.x = transform._artificial[j];
+                        obj.val = minMax.point[transform._artificial[j]];
+                        minMax.ahtung.push(obj);
+                    }
                 }
             }
+            minMax.point = minMax.point.splice(0, transform._before);
+            minMax.point.push(value);
         }
-
-        minMax.point = minMax.point.splice(0, transform._before);
-        minMax.point.push(value);
         extractedData[i].table.appendTo($cont);
         inf = $('<div>');
         str = 'Ітерація: ' + extractedData[i].i + '<br/>';

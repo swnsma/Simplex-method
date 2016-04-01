@@ -71,7 +71,7 @@ TableProcessor = (function()
             if (table[j][i].gt(0)) {
                 var el = Fraction.calculate(table[j][table[0].length - 1], table[j][i], '/');
 
-                if((min && el.lt(min)) || (!min && el.gt(0))) {
+                if((min && el.lt(min)) || (!min && (el.gt(0) || el.eq(0)))) {
                     result.min = j;
                     min = el;
                 }
