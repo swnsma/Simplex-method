@@ -30,7 +30,7 @@ function Inputer() {
         var label = $('<span>');
         var variables  = $('<select>').addClass('btn-warning');
         $(arr).each(function(){
-            if (this.val>=3)
+            if (this.val>=2)
             variables.append($('<option>').attr('value', this.val).text(this.text));
         });
         label.text('Кількість змінних: ');

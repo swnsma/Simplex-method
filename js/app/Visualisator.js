@@ -63,7 +63,7 @@ Visualizator = (function ($) {
             if(Math.round($fraction.getDividend() / M) >= 1) {
                 var m = Math.round($fraction.getDividend() / M);
                 var free = $fraction.getDividend() / M - m * M;
-                str += (m==1? '': m) + 'M' + free;
+                str += (m==1? '': m == -1 ? '-' : m) + 'M' + free;
             } else {
                 str += $fraction.getDividend();
             }
