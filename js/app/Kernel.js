@@ -28,8 +28,8 @@ function Kernel() {
 
         var inp = new Inputer();
         inp.generateMetaDataInput($('#container'), function(variables, limits){
-            inp.generateInputTable($('#container'), variables, limits, function(lim, fun, signs, direction) {
-                var trans = new Transformator(lim, fun, signs, direction);
+            inp.generateInputTable($('#container'), variables, limits, function(lim, fun, signs, inalienability, direction) {
+                var trans = new Transformator(lim, fun, signs, inalienability, direction);
                 var result = trans.transform();
 
                 for(var r in result) {
@@ -76,6 +76,20 @@ function Kernel() {
                     }
                 }
             }
+
+            if(transform._transformed.inalienability){
+                var arr = [];
+                for (var x = 0; x < minMax.point.length; x++) {
+                    if (transform._segregated.indexOf(x) != -1) {
+                        arr.push(Fraction.calculate(minMax.point[x], minMax.point[x+1], '-'));
+                        x++;
+                    } else {
+                        arr.push(minMax.point[i]);
+                    }
+                }
+                minMax.point = arr;
+            }
+
             minMax.point = minMax.point.splice(0, transform._before);
             minMax.point.push(value);
         }

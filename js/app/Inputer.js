@@ -122,6 +122,17 @@ function Inputer() {
             limitInputs[i].push(cell);
             cell.appendTo(row);
         }
+        var inalienability = [];
+        row = $('<div>');
+        for ( i =0; i< variables; i++) {
+            cell = $('<select>')
+                .append($('<option>').attr('value', '1').text('+'))
+                .append($('<option>').attr('value', '0').text('-'));
+            cell.addClass('sign-option').addClass('btn-info').addClass('inalienability').appendTo(row);
+            inalienability.push(cell);
+        }
+        row.appendTo(container);
+
         var button = $('<button>');
         button.text('PROCESS').addClass('btn').addClass('btn-info');
         button.on('click', function() {
@@ -136,12 +147,16 @@ function Inputer() {
             for(i = 0; i < signInputs.length; i++) {
                 extractedS.push(signInputs[i].val());
             }
+            var extractedI = [];
+            for(i = 0; i< inalienability.length; i++) {
+                extractedI.push(inalienability[i].val());
+            }
 
             var extractedF = [];
             for(i = 0; i < variables; i++) {
                 extractedF.push(new Fraction(inputs[i].val(), 1));
             }
-            callback(extractedTable, extractedF, extractedS, select.val());
+            callback(extractedTable, extractedF, extractedS, extractedI, select.val());
 
         });
         button.appendTo($node);

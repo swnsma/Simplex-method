@@ -1,16 +1,19 @@
-function Transformator($table, $function, $conditions, $direction) {
+function Transformator($table, $function, $conditions, $inalienability, $direction) {
     this._table = $table;
     this._before = $function.length;
     this._conditions = $conditions;
-    this._function = $function;
+    this._function = $function.slice();
     this._direction = $direction;
     this._processedRows = [];
     this._artificial = [];
+    this._inalienability = $inalienability;
+    this._segregated = [];
     this._transformed = {
         direction: false,
         extraVars: false,
         artificialVars: false,
-        results: false
+        results: false,
+        inalienability: false
     };
 
     this.processFirstStep = function () {
@@ -112,6 +115,25 @@ function Transformator($table, $function, $conditions, $direction) {
         }
     };
 
+    this.processFifthStep = function() {
+        for(var i = 0, j = 0; i< this._inalienability.length; i++, j++) {
+            if (this._inalienability[i] == 0) {
+                j++;
+                this._function.splice(j, 0, new Fraction(
+                    this._function[j-1].getDividend() * -1,
+                    this._function[j-1].getDivisor()));
+                this._segregated.push(j-1);
+                this._transformed.inalienability = true;
+
+                for(var x = 0; x < this._table.length; x++) {
+                    this._table[x].splice(j, 0,
+                        new Fraction(this._table[x][j-1].getDividend() * -1, this._table[x][j-1].getDivisor()));
+                }
+            }
+        }
+
+    };
+
     this.getTable = function () {
         return this._table;
     };
@@ -126,6 +148,7 @@ function Transformator($table, $function, $conditions, $direction) {
         this.processSecondStep();
         this.processThirdStep();
         this.processFourthStep();
+        this.processFifthStep();
 
         return this._transformed;
     }
